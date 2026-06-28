@@ -1,0 +1,44 @@
+/* ── Light Theme ─────────────────────────────────── */
+body.light {
+  --bg:     #f4f6fb;
+  --bg2:    #eaecf4;
+  --bg3:    #dfe3f0;
+  --card:   #ffffff;
+  --card2:  #f8faff;
+  --border: #d0d8f0;
+  --border2:#c0cce8;
+  --text:   #0d1a3a;
+  --text2:  #3a4a6a;
+  --muted:  #6070a0;
+  --muted2: #a0aac0;
+  --grad-glow: radial-gradient(ellipse at 50% 0%, rgba(0,150,184,.08) 0%, transparent 65%);
+}
+body.light .nav { background: rgba(244,246,251,.96); }
+body.light .grid-bg {
+  background-image:
+    linear-gradient(rgba(0,100,180,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,100,180,.03) 1px, transparent 1px);
+}
+
+/* ── OLED Theme ──────────────────────────────────── */
+body.oled {
+  --bg:     #000000;
+  --bg2:    #060606;
+  --bg3:    #0a0a0a;
+  --card:   #0a0a0a;
+  --card2:  #0f0f0f;
+  --border: #1a1a1a;
+  --border2:#222222;
+  --text:   #f0f4ff;
+  --text2:  #8898b8;
+  --muted:  #444455;
+  --grad-glow: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,.08) 0%, transparent 65%);
+}
+body.oled .nav { background: rgba(0,0,0,.98); }
+
+/* ── Global transitions ──────────────────────────── */
+*, *::before, *::after {
+  transition: background-color var(--t-mid) var(--ease),
+              border-color var(--t-mid) var(--ease),
+              color var(--t-mid) var(--ease);
+}

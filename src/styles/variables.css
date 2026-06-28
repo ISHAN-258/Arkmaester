@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+
+:root {
+  /* ── Core palette ─────────────────────────────── */
+  --bg:      #04060f;
+  --bg2:     #080c1a;
+  --bg3:     #0c1020;
+  --card:    #0d1222;
+  --card2:   #111827;
+  --border:  #1c2540;
+  --border2: #252f4a;
+
+  /* ── Brand colors ─────────────────────────────── */
+  --cyan:    #00d4ff;
+  --cyan2:   #0096b8;
+  --cyan3:   rgba(0,212,255,.08);
+  --green:   #00e896;
+  --amber:   #ffb700;
+  --red:     #ff4560;
+  --purple:  #8b5cf6;
+  --pink:    #ec4899;
+
+  /* ── Gradients ────────────────────────────────── */
+  --grad-brand: linear-gradient(135deg, #00d4ff 0%, #8b5cf6 100%);
+  --grad-card:  linear-gradient(135deg, rgba(0,212,255,.06) 0%, rgba(139,92,246,.04) 100%);
+  --grad-glow:  radial-gradient(ellipse at 50% 0%, rgba(0,212,255,.12) 0%, transparent 65%);
+
+  /* ── Text ─────────────────────────────────────── */
+  --text:    #eef2ff;
+  --text2:   #a8b8d8;
+  --muted:   #4a5a7a;
+  --muted2:  #2e3a52;
+
+  /* ── Shadows ──────────────────────────────────── */
+  --shadow-sm:  0 2px 8px rgba(0,0,0,.4);
+  --shadow-md:  0 4px 20px rgba(0,0,0,.5);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,.6);
+  --shadow-glow:0 0 30px rgba(0,212,255,.15);
+
+  /* ── Radius ───────────────────────────────────── */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+
+  /* ── Typography ───────────────────────────────── */
+  --font: 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+
+  /* ── Transitions ──────────────────────────────── */
+  --ease: cubic-bezier(.16,1,.3,1);
+  --t-fast: .15s;
+  --t-mid:  .25s;
+  --t-slow: .4s;
+}
