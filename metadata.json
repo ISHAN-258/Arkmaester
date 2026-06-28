@@ -1,0 +1,6 @@
+{
+  "name": "Arkmaester",
+  "description": "Conquer the Chaos. Settle the Score. An AI-powered study OS and productivity platform.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
