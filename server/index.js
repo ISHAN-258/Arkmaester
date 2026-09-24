@@ -1,9 +1,9 @@
 import "./env.js";
-import chatRoutes from "./routes/chat.js";
 import express from "express";
 import cors from "cors";
 import { connectDb, closeDb } from "./db.js";
 import dataRoutes from "./routes/data.js";
+import chatRoutes from "./routes/chat.js";
 
 const PORT = Number(process.env.PORT) || 3001;
 
@@ -40,6 +40,7 @@ async function main() {
     }
     next();
   }, dataRoutes);
+
   app.use("/api/chat", chatRoutes);
 
   app.use((err, _req, res, _next) => {

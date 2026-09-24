@@ -59,13 +59,7 @@ USER STUDY DATA:
     setMessages(newMessages);
     setLoading(true);
     try {
-      const res  = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          system: `You are Arkmaester, an intelligent AI study assistant embedded in a productivity platform called Arkmaester.
+      const systemInstruction = `You are Arkmaester, an intelligent AI study assistant embedded in a productivity platform called Arkmaester.
 Speak in first person as Arkmaester. Use language like:
 - "Arkmaester has observed..."
 - "Arkmaester recommends..."
@@ -73,12 +67,20 @@ Speak in first person as Arkmaester. Use language like:
 Be concise, encouraging, and data-driven. Reference actual numbers from the user data.
 Format: short paragraphs or bullet points. No markdown headers.
 
-${contextSummary}`,
+${contextSummary}`;
+
+      const res  = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          systemInstruction,
           messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
         }),
       });
       const data  = await res.json();
-      const reply = data.content?.find((b) => b.type === "text")?.text ?? "Arkmaester encountered an issue processing that request.";
+      const reply = res.ok
+        ? (data.content ?? "Arkmaester encountered an issue processing that request.")
+        : `Error: ${data.error || "AI server unavailable."}`;
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch {
       setMessages((prev) => [...prev, { role: "assistant", content: "⚠ Arkmaester lost connection. Check your network and try again." }]);

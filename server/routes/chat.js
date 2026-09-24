@@ -33,7 +33,8 @@ router.post("/", async (req, res, next) => {
       },
     });
 
-    res.json({ role: "assistant", content: response.text || "" });
+    const text = response.text || "";
+    res.json({ role: "assistant", content: text });
   } catch (err) {
     next(err);
   }
