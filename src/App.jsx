@@ -8,6 +8,7 @@ import { storageGet, storageSet, KEYS } from "./utils/storage.js";
 
 import ErrorBoundary  from "./components/common/ErrorBoundary.jsx";
 import Onboarding     from "./components/onboarding/Onboarding.jsx";
+import HowItWorksModal from "./components/onboarding/HowItWorksModal.jsx";
 import Navbar         from "./components/navbar/Navbar.jsx";
 import LandingPage    from "./components/landing/LandingPage.jsx";
 import TimerPage      from "./components/timer/TimerPage.jsx";
@@ -36,6 +37,7 @@ function InnerApp() {
   const { page, setPage, pomoMins, activeSubjId, handleSessionComplete, tasks, loaded } = useApp();
   const { askPermission, startSchedulers } = useNotifications();
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   const timerState = useTimer({ pomoMins, activeSubjId, onSessionComplete: handleSessionComplete });
 
@@ -71,10 +73,12 @@ function InnerApp() {
         }} />
       )}
 
-      <Navbar timerState={timerState} />
+      {showHelp && <HowItWorksModal onClose={() => setShowHelp(false)} />}
+
+      <Navbar timerState={timerState} onOpenHelp={() => setShowHelp(true)} />
 
       <main>
-        {page === "home"     && <LandingPage />}
+        {page === "home"     && <LandingPage onOpenHelp={() => setShowHelp(true)} />}
         {page === "study"    && <TimerPage timerState={timerState} />}
         {page === "tracker"  && <TrackerPage />}
         {page === "planner"  && <PlannerPage />}

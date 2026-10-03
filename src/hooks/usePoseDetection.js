@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import {
   loadMediaPipe, inferPose, parsePoseResult,
   loadObjectron, inferObjectron, parseObjectronResult,
-  analyzeFrameFallback, isMpReady, isMpFailed, isObjReady,
+  analyzeFrameFallback, isMpReady, isMpFailed, isObjReady, isObjFailed, isObjLoading,
 } from "../utils/mediapipe.js";
 import { sfxWarn } from "../utils/audio.js";
 
@@ -107,11 +107,13 @@ export function usePoseDetection({ onDistraction } = {}) {
 
     // ── Objectron phone inference (runs in parallel if ready) ────────
     let objPhoneScore = 0;
+    let objPhoneDetected = false;
     if (isObjReady()) {
       try {
         const objResult = await inferObjectron(infCanvas.current);
         const parsed    = parseObjectronResult(objResult);
         objPhoneScore   = parsed.phoneScore;
+        objPhoneDetected = parsed.phoneDetected;
         if (parsed.phoneDetected)
           addLog("warn", `📱 Objectron: phone detected (${objPhoneScore}% confidence)`);
       } catch { /* objectron fail = silent */ }
@@ -119,9 +121,10 @@ export function usePoseDetection({ onDistraction } = {}) {
 
     // ── Fuse phone scores (Objectron wins if available) ───────────────
     // Objectron is the primary signal; BlazePose wrist is secondary
-    const fusedPhoneScore = isObjReady()
-      ? Math.round(objPhoneScore * 0.65 + (poseRaw.phoneScore ?? 0) * 0.35)
-      : (poseRaw.phoneScore ?? 0);
+    const posePhoneScore = poseRaw.phoneScore ?? 0;
+    const fusedPhoneScore = isObjReady() && objPhoneDetected
+      ? Math.max(objPhoneScore, Math.round(objPhoneScore * 0.65 + posePhoneScore * 0.35))
+      : posePhoneScore;
 
     phoneAvg.current.push(fusedPhoneScore);
     const smoothPhone = Math.round(phoneAvg.current.avg ?? fusedPhoneScore);
@@ -257,12 +260,14 @@ export function usePoseDetection({ onDistraction } = {}) {
       }
 
       // Load Objectron (phone detection) — non-blocking
-      if (!isObjReady() && !objFailed()) {
+      if (!isObjReady() && !isObjFailed() && !isObjLoading()) {
         setObjectronStatus("loading");
         loadObjectron(
           () => { setObjectronStatus("ready"); addLog("good", "Objectron phone detector ready ✓"); },
           () => { setObjectronStatus("fallback"); addLog("warn", "Objectron unavailable — using wrist fallback"); }
         );
+      } else {
+        setObjectronStatus(isObjReady() ? "ready" : isObjFailed() ? "fallback" : "loading");
       }
 
       intervalRef.current = setInterval(runSnapshot, SNAP_INTERVAL_MS);
@@ -324,10 +329,4 @@ export function usePoseDetection({ onDistraction } = {}) {
     met, alert, log, elapsed, fb,
     modelStatus, objectronStatus, err, isCalibrating,
   };
-}
-
-// internal helper — avoids importing objFailed from mediapipe
-function objFailed() {
-  try { return !window.__mp_obj_loaded && document.querySelector('script[src*="objectron"]') !== null; }
-  catch { return false; }
 }

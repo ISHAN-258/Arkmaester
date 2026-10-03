@@ -20,7 +20,7 @@ export default function AIChatPage() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Arkmaester has observed your study patterns and is ready to advise. Ask me anything about your progress, planning, or productivity strategy. 📊",
+      content: "Hi! I'm Arkmaester AI - your personal study intelligence. Ask me anything about your progress, patterns, or planning.",
     },
   ]);
   const [input,   setInput]   = useState("");
@@ -59,28 +59,26 @@ USER STUDY DATA:
     setMessages(newMessages);
     setLoading(true);
     try {
-      const systemInstruction = `You are Arkmaester, an intelligent AI study assistant embedded in a productivity platform called Arkmaester.
-Speak in first person as Arkmaester. Use language like:
-- "Arkmaester has observed..."
-- "Arkmaester recommends..."
-- "Based on your patterns, Arkmaester suggests..."
-Be concise, encouraging, and data-driven. Reference actual numbers from the user data.
-Format: short paragraphs or bullet points. No markdown headers.
-
-${contextSummary}`;
-
-      const res  = await fetch("/api/chat", {
+      const res  = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          systemInstruction,
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: `You are Arkmaester AI, an intelligent study assistant embedded in Arkmaester, an AI productivity platform.
+Be concise, encouraging and practical. Use data to give specific advice.
+Never be generic - reference the actual numbers from the user's data.
+Always speak as Arkmaester: e.g. "Arkmaester recommends..." or "Arkmaester has observed...".
+Format: short paragraphs or bullet points. No markdown headers.
+Be concise, encouraging, and data-driven. Reference actual numbers from the user data.
+Format: short paragraphs or bullet points. No markdown headers.
+
+${contextSummary}`,
           messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
         }),
       });
       const data  = await res.json();
-      const reply = res.ok
-        ? (data.content ?? "Arkmaester encountered an issue processing that request.")
-        : `Error: ${data.error || "AI server unavailable."}`;
+      const reply = data.content?.find((b) => b.type === "text")?.text ?? "Arkmaester encountered an issue processing that request.";
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch {
       setMessages((prev) => [...prev, { role: "assistant", content: "⚠ Arkmaester lost connection. Check your network and try again." }]);
@@ -92,9 +90,9 @@ ${contextSummary}`;
   return (
     <div className="page">
       <div className="page-header">
-        <div className="sl">// AI ASSISTANT</div>
-        <h2 className="page-title">Arkmaester AI</h2>
-        <p className="page-sub">Your personal productivity intelligence. Powered by real session data.</p>
+        <div className="sl">// ARKMAESTER INTELLIGENCE</div>
+        <h2 className="page-title">AI Study Chat</h2>
+        <p className="page-sub">Ask Arkmaester anything about your progress, planning, or productivity.</p>
       </div>
 
       {/* Identity banner */}
@@ -127,7 +125,7 @@ ${contextSummary}`;
                 animation:"fadeUp .25s var(--ease)",
               }}>
                 {m.role === "assistant" && (
-                  <div className="ark-badge">Arkmaester Insight</div>
+                  <div className="ark-badge">ARKMAESTER AI</div>
                 )}
                 {m.content}
               </div>

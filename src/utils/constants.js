@@ -33,6 +33,17 @@ export const SOUND_OPTIONS = [
 
 export const TASK_PRIORITIES = ["high","medium","low"];
 
+export const FEATURES = [
+  { icon:"🎙", title:"Voice Planner", desc:"Speak your tasks naturally. Arkmaester parses your voice into prioritised to-dos instantly." },
+  { icon:"⏱", title:"Focus Timer", desc:"Pomodoro system with global timer that persists across all pages. Audio alerts and browser notifications." },
+  { icon:"👁", title:"Posture Detection", desc:"MediaPipe BlazePose tracks your posture and phone usage in real time, alerting you before bad habits set in." },
+  { icon:"📋", title:"Smart Scheduling", desc:"AI-powered daily planner auto-organises tasks by priority, detects subjects, and builds your optimal routine." },
+  { icon:"📊", title:"Analytics Dashboard", desc:"28-day heatmap, weekly charts, peak hour analysis, and subject breakdowns all powered by your real data." },
+  { icon:"🤖", title:"AI Insights", desc:"Arkmaester analyses your patterns and delivers personalised productivity intelligence and burnout warnings." },
+  { icon:"🧾", title:"Session Reports", desc:"Every study session is logged with duration, subject, notes, and exportable as CSV or TXT." },
+  { icon:"🔥", title:"Productivity Streaks", desc:"Visual streak calendar and milestone celebrations with confetti to keep you consistently motivated." },
+];
+
 export const REVS = [
   { name:"Priya S.",  role:"MCA, VIT",          init:"PS", stars:5, text:"Arkmaester changed how I study. Posture guard stopped my back pain and I stay focused way longer."         },
   { name:"Rahul M.",  role:"B.Tech, IIT",        init:"RM", stars:5, text:"Pomodoro timer with AI task tracking is my daily driver. Clean, fast, no distractions."                   },

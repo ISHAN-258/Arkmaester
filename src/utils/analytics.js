@@ -80,19 +80,17 @@ export function healthScoreLabel(score) {
 export function generateInsights({ peakHours, weeklyData, sessionLog, streak, distractionLog = [] }) {
   const insights = [];
 
-  // Peak hour insight
   const maxHourSecs = Math.max(...peakHours);
   if (maxHourSecs > 0) {
     const peakHour = peakHours.indexOf(maxHourSecs);
     const period   = peakHour < 12 ? "morning" : peakHour < 17 ? "afternoon" : "night";
     insights.push({
       icon: "🕐",
-      text: `You focus best during the ${period} — peak hour is ${peakHour}:00–${peakHour+1}:00.`,
+      text: `Arkmaester has observed: you focus best during the ${period} - peak hour is ${peakHour}:00-${peakHour+1}:00.`,
       type: "positive",
     });
   }
 
-  // Best day of week
   const dayTotals = new Array(7).fill(0);
   sessionLog.forEach((e) => {
     const day = new Date(e.ts).getDay();
@@ -101,44 +99,37 @@ export function generateInsights({ peakHours, weeklyData, sessionLog, streak, di
   const bestDayIdx = dayTotals.indexOf(Math.max(...dayTotals));
   const dayNames   = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   if (dayTotals[bestDayIdx] > 0)
-    insights.push({ icon: "📅", text: `Your best study day is ${dayNames[bestDayIdx]}.`, type: "positive" });
+    insights.push({ icon: "📅", text: `Arkmaester notes: your best study day is ${dayNames[bestDayIdx]}.`, type: "positive" });
 
-  // Streak insight
   if (streak >= 7)
-    insights.push({ icon: "🔥", text: `${streak}-day streak! Consistency is your superpower.`, type: "positive" });
+    insights.push({ icon: "🔥", text: `Arkmaester notes: ${streak}-day streak! Consistency is your superpower.`, type: "positive" });
   else if (streak === 0)
-    insights.push({ icon: "⚠️", text: "Arkmaester recommends starting a session today. Start a session to keep your streak alive.", type: "warning" });
+    insights.push({ icon: "⚠️", text: "Arkmaester recommends: no study activity today. Start a session to keep your streak alive.", type: "warning" });
 
-  // Distraction pattern
   if (distractionLog.length >= 3) {
     const phoneEvents   = distractionLog.filter((d) => d.type === "phone").length;
     const postureEvents = distractionLog.filter((d) => d.type === "posture").length;
     if (phoneEvents > postureEvents)
-      insights.push({ icon: "📵", text: `Phone distractions are your #1 issue (${phoneEvents} events). Try placing phone face-down.`, type: "warning" });
+      insights.push({ icon: "📵", text: `Arkmaester recommends: phone distractions are your #1 issue (${phoneEvents} events). Try placing phone face-down.`, type: "warning" });
     else if (postureEvents > 0)
-      insights.push({ icon: "🧍", text: `Your posture tends to drop after long sessions. Set a 30-min posture reminder.`, type: "warning" });
+      insights.push({ icon: "🧍", text: "Arkmaester observes: your posture tends to drop after long sessions. Set a 30-min posture reminder.", type: "warning" });
   }
 
-  // Weekly trend
   const thisWeek = weeklyData.reduce((a, d) => a + d.hours, 0);
   if (thisWeek >= 10)
-    insights.push({ icon: "📈", text: `Strong week — ${thisWeek.toFixed(1)}h logged. Keep the momentum.`, type: "positive" });
+    insights.push({ icon: "💪", text: `Arkmaester observes: strong week - ${thisWeek.toFixed(1)}h logged. Keep the momentum.`, type: "positive" });
   else if (thisWeek < 2 && sessionLog.length > 0)
-    insights.push({ icon: "📉", text: `Only ${thisWeek.toFixed(1)}h this week. Try adding one more 25-min session daily.`, type: "warning" });
+    insights.push({ icon: "📉", text: `Arkmaester recommends: only ${thisWeek.toFixed(1)}h this week. Try adding one more 25-min session daily.`, type: "warning" });
 
-  // Session length pattern — posture note
   const longSessions = sessionLog.filter((e) => e.secs >= 45 * 60);
   if (longSessions.length >= 3)
-    insights.push({ icon: "💡", text: "Arkmaester notes you often study 45+ min without break. Posture tends to drop — consider shorter pomodoros.", type: "info" });
+    insights.push({ icon: "🧘", text: "Arkmaester notes you often study 45+ min without break. Posture tends to drop - consider shorter pomodoros.", type: "info" });
 
-  // Fallback
   if (insights.length === 0)
-    insights.push({ icon: "🚀", text: "Arkmaester needs more session data — complete more sessions to unlock personalised AI insights.", type: "info" });
+    insights.push({ icon: "✨", text: "Arkmaester needs more session data - complete more sessions to unlock personalised AI insights.", type: "info" });
 
   return insights;
 }
-
-// ── Smart Break Suggestions ───────────────────────────────────────────────
 export function generateBreakSuggestion({ sessionCount, avgPosture, avgFocus, elapsedMins }) {
   if (sessionCount > 0 && sessionCount % 4 === 0)
     return { msg: `You've completed ${sessionCount} sessions — take a 15-min long break.`, type: "long" };
@@ -206,9 +197,11 @@ export function generateWeeklySummary({ weeklyData, sessionLog, subjects, streak
     distractions: distracts,
     rating:      totalHrs >= 15 ? "🏆 Excellent" : totalHrs >= 8 ? "✅ Good" : totalHrs >= 3 ? "⚠️ Fair" : "📉 Low",
     aiComment: totalHrs >= 15
-      ? "Arkmaester recommends maintaining this outstanding rhythm."
+      ? "Arkmaester says: Outstanding consistency! Maintain this rhythm."
       : totalHrs >= 8
-      ? "Arkmaester recommends one extra session next week to compound progress."
-      : "Arkmaester observes low activity — increase daily sessions to hit your goals.",
+      ? "Arkmaester says: Solid effort. Push for one extra session next week."
+      : "Arkmaester recommends: Increase daily sessions to hit your study goals.",
   };
 }
+
+

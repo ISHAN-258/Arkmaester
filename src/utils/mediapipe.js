@@ -14,6 +14,8 @@ let objLoading   = false;
 export const isMpReady  = () => poseReady;
 export const isMpFailed = () => poseFailed;
 export const isObjReady = () => objReady;
+export const isObjFailed = () => objFailed;
+export const isObjLoading = () => objLoading;
 
 // ── BlazePose loader ──────────────────────────────────────────────────────
 export async function loadMediaPipe(onReady, onFail) {
@@ -64,8 +66,8 @@ export async function loadMediaPipe(onReady, onFail) {
 
 // ── Objectron loader (phone detection) ───────────────────────────────────
 export async function loadObjectron(onReady, onFail) {
-  if (objReady)   { onReady(); return; }
-  if (objFailed)  { onFail();  return; }
+  if (objReady)   { onReady?.(); return; }
+  if (objFailed)  { onFail?.();  return; }
   if (objLoading) return;
   objLoading = true;
 
@@ -98,13 +100,14 @@ export async function loadObjectron(onReady, onFail) {
     ]);
 
     objReady   = true;
+    objFailed  = false;
     objLoading = false;
-    onReady();
+    onReady?.();
   } catch (e) {
     console.warn("Objectron load failed — using fallback:", e);
     objFailed  = true;
     objLoading = false;
-    onFail();
+    onFail?.();
   }
 }
 
@@ -206,6 +209,7 @@ export function parsePoseResult(results, vidW, vidH) {
   const lEarVis = lear?.visibility ?? 0;
   const rEarVis = rear?.visibility ?? 0;
   const bothVisible = lEarVis > 0.2 && rEarVis > 0.2;
+  const noseOffset = Math.abs(nose.x - shoulderMidX) / Math.max(0.01, shoulderWidth);
 
   let focScore;
   let earSymmetry = null;
@@ -216,12 +220,13 @@ export function parsePoseResult(results, vidW, vidH) {
     const minVis = Math.min(lEarVis, rEarVis);
     earSymmetry  = minVis / maxVis; // 1.0 = symmetric, 0 = one ear invisible
     // Map to focus score: 100% symmetric = 100 focus, 0% = 40 focus
-    focScore = Math.round(40 + earSymmetry * 60);
+    const centeredScore = Math.round(100 - Math.min(1, noseOffset) * 55);
+    focScore = Math.round((40 + earSymmetry * 60) * 0.65 + centeredScore * 0.35);
   } else {
     // Only one ear visible → head significantly turned
     const oneVisible = lEarVis > 0.2 || rEarVis > 0.2;
-    focScore    = oneVisible ? 45 : 35; // penalise but don't bottom out
-    earSymmetry = 0;
+    focScore    = Math.round(100 - Math.min(1, noseOffset) * (oneVisible ? 65 : 75));
+    earSymmetry = oneVisible ? Math.max(0, 1 - noseOffset) : null;
   }
 
   focScore = Math.max(20, Math.min(100, focScore));
@@ -292,7 +297,7 @@ export function parseObjectronResult(results) {
 
   const maxScore  = Math.max(...boxes.map((b) => b.score));
   const phoneScore     = Math.round(maxScore * 100);
-  const phoneDetected  = phoneScore >= 40;
+  const phoneDetected  = phoneScore >= 45;
 
   return { phoneDetected, phoneScore, boxes };
 }

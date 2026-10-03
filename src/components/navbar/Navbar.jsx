@@ -13,7 +13,7 @@ const NAV = [
   { id:"chat",     label:"AI Chat"  },
 ];
 
-export default function Navbar({ timerState }) {
+export default function Navbar({ timerState, onOpenHelp }) {
   const { page, setPage } = useApp();
   const { theme, setTheme } = useTheme();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -39,6 +39,7 @@ export default function Navbar({ timerState }) {
         <button className={`timer-pill${running?" running":""}`} onClick={() => goTo("study")} title="Timer">
           {running ? "▶ " : ""}{fmtTime(tl)}
         </button>
+        <button className="nav-help-btn" onClick={onOpenHelp} title="How Arkmaester Works" aria-label="How Arkmaester Works">?</button>
         <select className="theme-select" value={theme} onChange={(e) => setTheme(e.target.value)} title="Theme">
           {THEMES.map((t) => <option key={t.id} value={t.id}>{t.label}</option>)}
         </select>
@@ -55,6 +56,9 @@ export default function Navbar({ timerState }) {
           <button key={item.id} className={`nav-btn${page===item.id?" active":""}`} onClick={() => goTo(item.id)}>{item.label}</button>
         ))}
         <button className={`timer-pill${running?" running":""}`} onClick={() => goTo("study")}>{running ? "▶ " : ""}{fmtTime(tl)}</button>
+        <button className="nav-help-btn" onClick={() => { onOpenHelp?.(); setDrawerOpen(false); }} style={{ width:"100%", borderRadius:8, marginTop:".4rem" }}>
+          ? How It Works
+        </button>
         <select className="theme-select" value={theme} onChange={(e) => setTheme(e.target.value)} style={{ marginTop:".4rem", width:"100%", padding:".4rem" }}>
           {THEMES.map((t) => <option key={t.id} value={t.id}>{t.label}</option>)}
         </select>

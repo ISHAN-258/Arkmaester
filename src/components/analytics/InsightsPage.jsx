@@ -102,7 +102,7 @@ export default function InsightsPage() {
 
       {/* AI Insights */}
       <div style={{ marginBottom:"1.1rem" }}>
-        <div className="sl" style={{ marginBottom:".65rem" }}>// AI INSIGHTS</div>
+        <div className="sl" style={{ marginBottom:".65rem" }}>// ARKMAESTER INSIGHT ENGINE</div>
         <div className="insights-grid">
           {insights.map((ins, i) => (
             <div key={i} className={`insight-card ${ins.type}`} style={{ animationDelay:`${i*.07}s` }}>
