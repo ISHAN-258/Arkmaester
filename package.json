@@ -8,7 +8,7 @@
     "dev:web": "vite",
     "dev:api": "node server/index.js",
     "start:api": "node server/index.js",
-    "build": "vite build",
+    "build": "node node_modules/vite/bin/vite.js build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:ui": "vitest --ui"
