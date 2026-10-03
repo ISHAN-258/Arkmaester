@@ -124,6 +124,7 @@ export default function LandingPage({ onOpenHelp }) {
             </div>
           </div>
         </div>
+      </section>
 
       {/* Workflow section */}
       <section style={{ position:"relative", zIndex:1, padding:"4rem 1.75rem", maxWidth:1060, margin:"0 auto" }}>
@@ -267,5 +268,3 @@ function ReviewsSection() {
     </section>
   );
 }
-
-
