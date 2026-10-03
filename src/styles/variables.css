@@ -2,17 +2,17 @@
 
 :root {
   /* ── Core palette ─────────────────────────────── */
-  --bg:      #04060f;
-  --bg2:     #080c1a;
-  --bg3:     #0c1020;
-  --card:    #0d1222;
-  --card2:   #111827;
-  --border:  #1c2540;
-  --border2: #252f4a;
+  --bg:      #050711;
+  --bg2:     #0a0e1b;
+  --bg3:     #101626;
+  --card:    #0d1322;
+  --card2:   #121a2c;
+  --border:  #1b2942;
+  --border2: #2a3a59;
 
   /* ── Brand colors ─────────────────────────────── */
-  --cyan:    #00d4ff;
-  --cyan2:   #0096b8;
+  --cyan:    #27d7f5;
+  --cyan2:   #1498bd;
   --cyan3:   rgba(0,212,255,.08);
   --green:   #00e896;
   --amber:   #ffb700;
@@ -26,10 +26,13 @@
   --grad-glow:  radial-gradient(ellipse at 50% 0%, rgba(0,212,255,.12) 0%, transparent 65%);
 
   /* ── Text ─────────────────────────────────────── */
-  --text:    #eef2ff;
-  --text2:   #a8b8d8;
-  --muted:   #4a5a7a;
-  --muted2:  #2e3a52;
+  --text:    #f4f7ff;
+  --text2:   #aab8d0;
+  --muted:   #667795;
+  --muted2:  #3b4b68;
+  --surface: #0d1322;
+  --surface-elevated: #121a2c;
+  --focus-ring: 0 0 0 3px rgba(39,215,245,.16);
 
   /* ── Shadows ──────────────────────────────────── */
   --shadow-sm:  0 2px 8px rgba(0,0,0,.4);
@@ -38,10 +41,10 @@
   --shadow-glow:0 0 30px rgba(0,212,255,.15);
 
   /* ── Radius ───────────────────────────────────── */
-  --r-sm: 6px;
-  --r-md: 10px;
-  --r-lg: 16px;
-  --r-xl: 22px;
+  --r-sm: 7px;
+  --r-md: 11px;
+  --r-lg: 15px;
+  --r-xl: 20px;
 
   /* ── Typography ───────────────────────────────── */
   --font: 'Inter', sans-serif;
@@ -53,3 +56,4 @@
   --t-mid:  .25s;
   --t-slow: .4s;
 }
+

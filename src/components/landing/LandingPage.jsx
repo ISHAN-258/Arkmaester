@@ -37,6 +37,7 @@ export default function LandingPage({ onOpenHelp }) {
   const { setPage, sessionLog, streak, todayStudiedHrs } = useApp();
   const totalHrs = +(sessionLog.reduce((a, e) => a + e.secs, 0) / 3600).toFixed(1);
   const daysActive = new Set(sessionLog.map((e) => e.date)).size;
+  const todaySessions = sessionLog.filter((e) => e.date === new Date().toISOString().slice(0,10)).length;
   const featureColors = ["var(--cyan)","var(--green)","var(--amber)","var(--purple)","var(--pink)"];
 
   return (
@@ -95,7 +96,34 @@ export default function LandingPage({ onOpenHelp }) {
             </div>
           ))}
         </div>
-      </section>
+        <div className="hero-preview fade-up" style={{ animationDelay:".22s" }}>
+          <div className="hero-preview-shell">
+            <div className="preview-toolbar">
+              <div className="preview-dots"><span /><span /><span /></div>
+              <div className="preview-label">Arkmaester command center</div>
+            </div>
+            <div className="preview-body">
+              <div className="preview-greeting">Today at a glance</div>
+              <div className="preview-title">Your next focused block</div>
+              <div className="preview-primary">
+                <div>
+                  <div className="preview-kicker">Recommended next</div>
+                  <div className="preview-task">Start a focused study session</div>
+                </div>
+                <div className="preview-time">25:00</div>
+              </div>
+              <div className="preview-grid">
+                <div className="preview-stat"><strong>{todaySessions}</strong><span>sessions today</span></div>
+                <div className="preview-stat"><strong>{todayStudiedHrs.toFixed(1)}h</strong><span>focused today</span></div>
+                <div className="preview-stat"><strong>{streak}</strong><span>day streak</span></div>
+              </div>
+              <div className="preview-progress">
+                <div className="preview-progress-top"><span>Weekly momentum</span><span>{daysActive} active days</span></div>
+                <div className="preview-bar"><i /></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
       {/* Workflow section */}
       <section style={{ position:"relative", zIndex:1, padding:"4rem 1.75rem", maxWidth:1060, margin:"0 auto" }}>
@@ -239,4 +267,5 @@ function ReviewsSection() {
     </section>
   );
 }
+
 

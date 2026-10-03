@@ -4,13 +4,13 @@ import { useTheme, THEMES } from "../../hooks/useTheme.js";
 import { fmtTime } from "../../utils/helpers.js";
 
 const NAV = [
-  { id:"home",     label:"Home"     },
-  { id:"study",    label:"Timer"    },
-  { id:"tracker",  label:"Tracker"  },
-  { id:"planner",  label:"Planner"  },
-  { id:"insights", label:"Insights" },
-  { id:"history",  label:"History"  },
-  { id:"chat",     label:"AI Chat"  },
+  { id:"home",     label:"Home",     icon:"H" },
+  { id:"study",    label:"Timer",    icon:"T" },
+  { id:"tracker",  label:"Tracker",  icon:"F" },
+  { id:"planner",  label:"Planner",  icon:"P" },
+  { id:"insights", label:"Insights", icon:"I" },
+  { id:"history",  label:"History",  icon:"R" },
+  { id:"chat",     label:"AI Chat",  icon:"AI" },
 ];
 
 export default function Navbar({ timerState, onOpenHelp }) {
@@ -33,7 +33,7 @@ export default function Navbar({ timerState, onOpenHelp }) {
       <div className="nav-links">
         {NAV.map((item) => (
           <button key={item.id} className={`nav-btn${page===item.id?" active":""}`} onClick={() => goTo(item.id)}>
-            {item.label}
+            <span className="nav-icon" aria-hidden="true">{item.icon}</span><span>{item.label}</span>
           </button>
         ))}
         <button className={`timer-pill${running?" running":""}`} onClick={() => goTo("study")} title="Timer">
@@ -53,7 +53,7 @@ export default function Navbar({ timerState, onOpenHelp }) {
       {/* Mobile drawer */}
       <div className={`nav-drawer${drawerOpen?" open":""}`}>
         {NAV.map((item) => (
-          <button key={item.id} className={`nav-btn${page===item.id?" active":""}`} onClick={() => goTo(item.id)}>{item.label}</button>
+          <button key={item.id} className={`nav-btn${page===item.id?" active":""}`} onClick={() => goTo(item.id)}><span className="nav-icon" aria-hidden="true">{item.icon}</span><span>{item.label}</span></button>
         ))}
         <button className={`timer-pill${running?" running":""}`} onClick={() => goTo("study")}>{running ? "▶ " : ""}{fmtTime(tl)}</button>
         <button className="nav-help-btn" onClick={() => { onOpenHelp?.(); setDrawerOpen(false); }} style={{ width:"100%", borderRadius:8, marginTop:".4rem" }}>
@@ -63,6 +63,18 @@ export default function Navbar({ timerState, onOpenHelp }) {
           {THEMES.map((t) => <option key={t.id} value={t.id}>{t.label}</option>)}
         </select>
       </div>
+    
+
+      <div className="mobile-nav" aria-label="Primary navigation">
+        {NAV.filter((item) => ["home", "study", "tracker", "planner", "chat"].includes(item.id)).map((item) => (
+          <button key={item.id} className={"mobile-nav-item" + (page===item.id ? " active" : "")} onClick={() => goTo(item.id)}>
+            <span className="nav-icon" aria-hidden="true">{item.icon}</span><span>{item.label}</span>
+          </button>
+        ))}
+      </div>
     </nav>
   );
 }
+
+
+
